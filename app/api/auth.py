@@ -32,15 +32,15 @@ async def login(
 
 @auth_router.post("/refresh")
 async def refresh_token(
-    payload: RefreshToken, response: Response, db: Annotated[AsyncSession, Depends(get_db)]
+    payload: RefreshToken, db: Annotated[AsyncSession, Depends(get_db)]
 ):
-    return await AuthService(db).refresh_token(payload, response)
+    return await AuthService(db).refresh_token(payload)
 
 
 @auth_router.post("/logout")
 async def logout(
     db: Annotated[AsyncSession, Depends(get_db)],
     response: Response,
-    refresh_token: Optional[str] = Cookie(None, alias="refresh_token"),
+    refresh_token: Annotated[Optional[str], Cookie(alias="refresh_token")] = None,
 ):
     return await  AuthService(db).logout(response, refresh_token)
