@@ -75,8 +75,8 @@ class AuthService:
                 refresh_token=refresh_token,
                 token_type="bearer",
             )
-
-    async def refresh_token(self, payload, response):
+        
+    async def refresh_token(self, payload):
         async with self.db.begin():
             db_token = await self.repo.get_refresh_token(payload.refresh_token)
 
