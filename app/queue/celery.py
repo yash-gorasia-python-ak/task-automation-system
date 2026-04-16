@@ -39,5 +39,3 @@ celery_app.autodiscover_tasks(["app.queue.tasks"])
 
 
 celery_app.conf.timezone = "UTC"
-
-

@@ -6,7 +6,7 @@ from app.dependencies.get_session import get_db
 from app.dependencies.rbac import RoleChecker
 
 from app.services.schedule import create_dynamic_task
-from app.services.task_get_del_service import TaskGetDelService
+from app.services.task_service import TaskService
 
 from app.schemas.task_schema import TaskCreate
 from app.schemas.token_schema import TokenData
@@ -24,15 +24,24 @@ async def create_task(paylaod: TaskCreate, user: Annotated[TokenData, Depends(ge
 @task_router.get("/")
 async def get_all_tasks(user: Annotated[TokenData, Depends(get_current_user)], db: Annotated[AsyncSession, Depends(get_db)]):
 
-    return await TaskGetDelService(db).get_tasks(user.user_id)
+    return await TaskService(db).get_tasks(user.user_id)
 
 @task_router.get("/{task_id}")
 async def get_task_id(task_id: int, user: Annotated[TokenData, Depends(get_current_user)], db: Annotated[AsyncSession, Depends(get_db)]):
 
-    return await TaskGetDelService(db).get_task_by_id(task_id)
+    return await TaskService(db).get_task_by_id(task_id)
 
 
 @task_router.delete("/{task_id}")
 async def delete_task(task_id: int, user: Annotated[TokenData, Depends(get_current_user)], db: Annotated[AsyncSession, Depends(get_db)]):
 
-    return await TaskGetDelService(db).delete_task_id(task_id)
+    return await TaskService(db).delete_task_id(task_id)
+
+@task_router.post("/trigger/{task_id}")
+async def trigger_task_now(
+    task_id: int,
+    current_user: current_user,
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+
+    return await TaskService(db).trigger(task_id)
