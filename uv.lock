@@ -189,6 +189,19 @@ wheels = [
 ]
 
 [[package]]
+name = "celery-pool-asyncio"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "asgiref" },
+    { name = "celery" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7f/07/8005ac90afb30c43c22dd7a8f425c7c3b6785bdc484cb27662a35f6d87d1/celery-pool-asyncio-0.2.0.tar.gz", hash = "sha256:330e0ff31a7f6e3ea9cb004843f2f967601602b52cee05a2faea7ed65b76a5b8", size = 19200, upload-time = "2020-05-13T21:34:27.708Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8e/8b/e6e6535df47bbeae8387a8ed9512155fb98bd72550be1b599fef43636c28/celery_pool_asyncio-0.2.0-py2.py3-none-any.whl", hash = "sha256:72cdec065060bc99af57771cba7f0444d8a901842ee3c859d0d167c547764a21", size = 19712, upload-time = "2020-05-13T21:34:25.657Z" },
+]
+
+[[package]]
 name = "certifi"
 version = "2026.2.25"
 source = { registry = "https://pypi.org/simple" }
@@ -1423,6 +1436,7 @@ dependencies = [
     { name = "asgiref" },
     { name = "asyncpg" },
     { name = "celery" },
+    { name = "celery-pool-asyncio" },
     { name = "fastapi", extra = ["standard"] },
     { name = "fastapi-mail" },
     { name = "itsdangerous" },
@@ -1443,6 +1457,7 @@ requires-dist = [
     { name = "asgiref", specifier = ">=3.11.1" },
     { name = "asyncpg", specifier = ">=0.31.0" },
     { name = "celery", specifier = ">=5.6.3" },
+    { name = "celery-pool-asyncio", specifier = ">=0.2.0" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.135.3" },
     { name = "fastapi-mail", specifier = ">=1.6.2" },
     { name = "itsdangerous", specifier = ">=2.2.0" },
