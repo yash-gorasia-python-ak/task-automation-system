@@ -20,6 +20,6 @@ class TaskStatus(str, Enum):
 class TaskCreate(BaseModel):
     name: str
     task_type: TaskType
-    description: Optional[str]
-    interval_time: Optional[int]
+    description: Optional[str | None]
+    interval_time: Optional[int | None]
     schedule_time: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

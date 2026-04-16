@@ -17,6 +17,7 @@ async def create_dynamic_task(data: TaskCreate, user_id: int, db: AsyncSession):
         name=data.name,
         task_type=data.task_type,
         description=data.description,
+        interval_time=data.interval_time,
         schedule_time=data.schedule_time,
         user_id=user_id,
     )
@@ -27,7 +28,6 @@ async def create_dynamic_task(data: TaskCreate, user_id: int, db: AsyncSession):
     discriminator = ""
 
     if data.task_type == TaskType.REMINDER:
-        # Clocked: Run once at a specific ISO datetime string
         dt = data.schedule_time
         sched = ClockedSchedule(clocked_time=dt)
         db.add(sched)
@@ -43,7 +43,6 @@ async def create_dynamic_task(data: TaskCreate, user_id: int, db: AsyncSession):
         schedule_id, discriminator = sched.id, "intervalschedule"
 
     elif data.task_type == TaskType.SEND_COMIC:
-        # Crontab: "0 9 * * 1"
         dt = data.schedule_time
 
         sched = CrontabSchedule(
@@ -59,7 +58,6 @@ async def create_dynamic_task(data: TaskCreate, user_id: int, db: AsyncSession):
 
     is_one_off = data.task_type == TaskType.REMINDER
 
-    # 3. Create the Periodic Task Link
     periodic_task = PeriodicTask(
         name=f"User-{user_id}-Task-{new_task.task_id}",
         task=data.task_type.value,

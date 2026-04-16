@@ -25,8 +25,6 @@ def send_scheduled_reminder(self, user_id: int, task_id: int):
         raise self.retry(exc=exc)
 
 
-
-
 @celery_app.task(name="system_check", bind=True, max_retries=3)
 def system_check_in_intervals(self, user_id: int, task_id: int):
     async def _run():

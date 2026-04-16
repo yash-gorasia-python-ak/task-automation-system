@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
-from datetime import datetime, timezone
-from sqlalchemy import Integer, String, ForeignKey, DateTime
+from datetime import datetime
+from sqlalchemy import Integer, String, ForeignKey, DateTime, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.schemas.task_schema import TaskStatus, TaskType
 from app.db.base import Base
@@ -10,6 +10,9 @@ if TYPE_CHECKING:
 
 class Task(Base):
     __tablename__ = "tasks"
+    __table_args__ = (
+        Index("idx_task_status_last_run_at", "status", "last_run_at"),
+    )
 
     task_id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String, nullable=False)

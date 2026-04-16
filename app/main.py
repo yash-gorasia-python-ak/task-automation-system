@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from app.error.register_handlers import register_all_error
 from app.api import auth
 from app.api import task
+from app.api import admin
 
 from app.models.task_model import Task
 from app.models.user_model import User
@@ -37,3 +38,4 @@ register_all_error(app)
 
 app.include_router(auth.auth_router, prefix="/auth", tags=["Auth Endpoints"])
 app.include_router(task.task_router, prefix="/tasks", tags=["Task Endpoints"])
+app.include_router(admin.admin_router, prefix="/admin", tags=["Admin Endpoints"])
