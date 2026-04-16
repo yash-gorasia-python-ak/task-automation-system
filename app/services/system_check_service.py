@@ -6,9 +6,7 @@ from app.schemas.task_schema import TaskStatus
 
 
 async def system_check(user_id, task_id, db):
-    res = await db.execute(
-        select(Task).where(Task.task_id == task_id)
-    )
+    res = await db.execute(select(Task).where(Task.task_id == task_id))
     task = res.scalar_one_or_none()
 
     if not task:

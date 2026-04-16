@@ -2,5 +2,5 @@ projectKey=task-automation-system
 serverUrl=http://localhost:9000
 serverVersion=26.3.0.120487
 dashboardUrl=http://localhost:9000/dashboard?id=task-automation-system
-ceTaskId=30ab8afe-029c-4646-a271-91fcbab2a53a
-ceTaskUrl=http://localhost:9000/api/ce/task?id=30ab8afe-029c-4646-a271-91fcbab2a53a
+ceTaskId=785cc577-353c-41d9-8887-5fe6b72b95e7
+ceTaskUrl=http://localhost:9000/api/ce/task?id=785cc577-353c-41d9-8887-5fe6b72b95e7
