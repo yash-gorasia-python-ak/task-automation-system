@@ -127,7 +127,6 @@ async def test_refresh_token_reuse_detection():
 
 @pytest.mark.asyncio
 async def test_refresh_token_expired():
-    # 1. Setup Mock DB
     mock_db = MagicMock()
     mock_db.begin.return_value = AsyncMock()
 

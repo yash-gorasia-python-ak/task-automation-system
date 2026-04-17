@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import patch, AsyncMock
 from datetime import datetime, timezone
 
+
 @pytest.mark.asyncio
 async def test_create_task_route(authenticated_client):
     payload = {
@@ -30,22 +31,41 @@ async def test_create_task_route(authenticated_client):
 async def test_get_all_tasks_route(authenticated_client):
     mock_data = [{"task_id": 1, "title": "Test Task"}]
 
-    # Mocking the TaskService class method
-    with patch("app.api.task.TaskService.get_tasks", new_callable=AsyncMock) as mock_method:
+    with patch(
+        "app.api.task.TaskService.get_tasks", new_callable=AsyncMock
+    ) as mock_method:
         mock_method.return_value = mock_data
 
         response = await authenticated_client.get("/tasks/")
 
         assert response.status_code == 200
         assert len(response.json()) == 1
-        mock_method.assert_called_once_with(1) # 1 is the user_id from mock_user
+        mock_method.assert_called_once_with(1)
+
+
+@pytest.mark.asyncio
+async def test_get_task_by_route(authenticated_client):
+    mock_data = [{"task_id": 1, "title": "Test Task"}]
+
+    with patch(
+        "app.api.task.TaskService.get_tasks", new_callable=AsyncMock
+    ) as mock_method:
+        mock_method.return_value = mock_data
+
+        response = await authenticated_client.get("/tasks/")
+
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        mock_method.assert_called_once_with(1)
 
 
 @pytest.mark.asyncio
 async def test_delete_task_route(authenticated_client):
     task_id = 99
 
-    with patch("app.api.task.TaskService.delete_task_id", new_callable=AsyncMock) as mock_del:
+    with patch(
+        "app.api.task.TaskService.delete_task_id", new_callable=AsyncMock
+    ) as mock_del:
         mock_del.return_value = {"message": "deleted"}
 
         response = await authenticated_client.delete(f"/tasks/{task_id}")
@@ -54,14 +74,16 @@ async def test_delete_task_route(authenticated_client):
         mock_del.assert_called_once_with(task_id)
 
 
-# @pytest.mark.asyncio
-# async def test_trigger_task_route(authenticated_client):
-#     task_id = 5
+@pytest.mark.asyncio
+async def test_trigger_task_route(authenticated_client):
+    task_id = 5
 
-#     with patch("app.api.task.TaskService.trigger", new_callable=AsyncMock) as mock_trigger:
-#         mock_trigger.return_value = {"status": "triggered"}
+    with patch(
+        "app.api.task.TaskService.trigger", new_callable=AsyncMock
+    ) as mock_trigger:
+        mock_trigger.return_value = {"status": "triggered"}
 
-#         response = await authenticated_client.post(f"/tasks/trigger/{task_id}")
+        response = await authenticated_client.post(f"/tasks/trigger/{task_id}")
 
-#         assert response.status_code == 200
-#         mock_trigger.assert_called_once_with(task_id)
+        assert response.status_code == 200
+        mock_trigger.assert_called_once_with(task_id)
