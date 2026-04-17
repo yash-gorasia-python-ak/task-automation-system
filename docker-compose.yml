@@ -1,9 +1,38 @@
 services:
+  task_automation_system:
+    build: .
+    container_name: task-automation-system-container
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+
+  worker:
+    build: .
+    command: uv run celery -A app.queue.celery worker --loglevel=info
+    env_file: .env
+    depends_on:
+      - redis
+      - rabbitmq
+      - db
+
+  beat:
+    build: .
+    command: uv run celery -A app.queue.celery beat -S sqlalchemy_celery_beat.schedulers:DatabaseScheduler --loglevel=info
+    env_file: .env
+    depends_on:
+      - redis
+      - rabbitmq
+      - db
+
   db:
     image: postgres:15
     container_name: postgres_db
     ports:
-      - 5433:5432
+      - "5433:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -15,7 +44,7 @@ services:
     image: postgres:15
     container_name: test_postgres_db
     ports:
-      - 5434:5432
+      - "5434:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -23,15 +52,21 @@ services:
     volumes:
       - test_postgres_data1:/var/lib/postgresql/data
 
-
   rabbitmq:
     image: rabbitmq:3-management
+    container_name: rabbitmq-container
     ports:
       - "5672:5672"
       - "15672:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
+
+  redis:
+    image: redis:alpine
+    container_name: redis-container
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_data1:
