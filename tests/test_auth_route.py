@@ -1,6 +1,5 @@
 import pytest
 from unittest.mock import patch, AsyncMock
-from app.schemas.user_schema import RegisterResponse
 
 
 @pytest.mark.asyncio

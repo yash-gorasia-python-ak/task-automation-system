@@ -3,9 +3,11 @@ import asyncio
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy import text
 
 from app.main import app
 from app.db.base import Base
+from sqlalchemy_celery_beat.models import ModelBase as BeatBase
 from app.dependencies.get_session import get_db
 from app.core.config import settings
 from app.middleware.log_middleware import RequestLoggingMiddleware
@@ -17,7 +19,6 @@ TEST_DATABASE_URL = settings.TEST_DB_URL
 from sqlalchemy.pool import NullPool
 
 
-# personal note: Overrides pytest-asyncio's loop to ensure it stays open for the session.
 @pytest.fixture(scope="session")
 def event_loop():
     loop = asyncio.get_event_loop_policy().new_event_loop()
@@ -26,7 +27,7 @@ def event_loop():
 
 
 engine_test = create_async_engine(
-    TEST_DATABASE_URL,
+    settings.TEST_DB_URL,
     poolclass=NullPool,
 )
 
@@ -37,11 +38,17 @@ TestingSessionLocal = async_sessionmaker(
 
 @pytest_asyncio.fixture(scope="session", autouse=True)
 async def setup_database():
-    """Create tables once per test session."""
     async with engine_test.begin() as conn:
+
         await conn.run_sync(Base.metadata.create_all)
+
+        await conn.execute(text("CREATE SCHEMA IF NOT EXISTS celery_schema"))
+        await conn.run_sync(BeatBase.metadata.create_all)
+
     yield
+
     async with engine_test.begin() as conn:
+        await conn.run_sync(BeatBase.metadata.drop_all)
         await conn.run_sync(Base.metadata.drop_all)
 
 
