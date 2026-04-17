@@ -33,7 +33,7 @@ class UserRepository:
 
     async def store_refresh_token(self, user_id, refresh_token):
         db_token = RefreshToken(
-            token=refresh_token,
+            refresh_token=refresh_token,
             user_id=user_id,
             expires_at=datetime.now(timezone.utc) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
             is_used=False,
@@ -43,7 +43,7 @@ class UserRepository:
 
     async def get_refresh_token(self, refresh_token):
         res = await self.db.execute(
-            select(RefreshToken).where(RefreshToken.token == refresh_token)
+            select(RefreshToken).where(RefreshToken.refresh_token == refresh_token)
         )
         return res.scalar_one_or_none()
 
@@ -53,6 +53,6 @@ class UserRepository:
 
     async def delete_refresh_token(self, refresh_token):
         await self.db.execute(
-            delete(RefreshToken).where(RefreshToken.token == refresh_token)
+            delete(RefreshToken).where(RefreshToken.refresh_token == refresh_token)
         )
         # await self.db.commit()
