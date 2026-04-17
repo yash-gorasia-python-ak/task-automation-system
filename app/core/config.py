@@ -3,7 +3,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     DB_URL: str
+    TEST_DB_URL: str
+
     CELERY_DB_URL: str
+    TEST_CELERY_DB_URL: str
 
     ACCESS_SECRET_KEY: str
     REFRESH_SECRET_KEY: str
@@ -37,4 +40,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings(**{})
-

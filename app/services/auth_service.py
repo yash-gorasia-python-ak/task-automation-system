@@ -75,7 +75,7 @@ class AuthService:
                 refresh_token=refresh_token,
                 token_type="bearer",
             )
-        
+
     async def refresh_token(self, payload):
         async with self.db.begin():
             db_token = await self.repo.get_refresh_token(payload.refresh_token)
@@ -94,7 +94,7 @@ class AuthService:
             if db_token.expires_at.replace(tzinfo=timezone.utc) < datetime.now(
                 timezone.utc
             ):
-                await self.repo.delete_refresh_token(db_token.token)
+                await self.repo.delete_refresh_token(db_token.refresh_token)
                 raise InvalidToken()
 
             db_token.is_used = True

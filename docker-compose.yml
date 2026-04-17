@@ -11,6 +11,19 @@ services:
     volumes:
       - postgres_data1:/var/lib/postgresql/data
 
+  test_db:
+    image: postgres:15
+    container_name: test_postgres_db
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test_task_automation_system
+    volumes:
+      - test_postgres_data1:/var/lib/postgresql/data
+
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -22,3 +35,4 @@ services:
 
 volumes:
   postgres_data1:
+  test_postgres_data1:
