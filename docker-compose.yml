@@ -10,14 +10,42 @@ services:
       - redis
       - rabbitmq
 
-  worker:
+  default_worker:
     build: .
-    command: uv run celery -A app.queue.celery worker --loglevel=info
+    command: uv run celery -A app.queue.celery worker -Q default --concurrency=1 --loglevel=info
     env_file: .env
     depends_on:
       - redis
       - rabbitmq
       - db
+
+  send_reminder_worker:
+    build: .
+    command: uv run celery -A app.queue.celery worker -Q send_reminder --concurrency=2 --loglevel=info
+    env_file: .env
+    depends_on:
+      - redis
+      - rabbitmq
+      - db
+
+  send_comic_worker:
+    build: .
+    command: uv run celery -A app.queue.celery worker -Q send_comic --concurrency=2 --loglevel=info
+    env_file: .env
+    depends_on:
+      - redis
+      - rabbitmq
+      - db
+
+  system_check_worker:
+    build: .
+    command: uv run celery -A app.queue.celery worker -Q system_check --concurrency=2 --loglevel=info
+    env_file: .env
+    depends_on:
+      - redis
+      - rabbitmq
+      - db
+
 
   beat:
     build: .

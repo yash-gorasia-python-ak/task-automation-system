@@ -145,13 +145,13 @@ All routes are prefixed with `/tasks`.
 ## Running Tests
 
 ```bash
-uv run pytest
+docker exec -it task-automation-system-container uv run pytest
 ```
 
 With coverage report:
 
 ```bash
-uv run pytest --cov
+docker exec -it task-automation-system-container uv run pytest --cov
 ```
 
 Tests are organized to mirror the app structure:

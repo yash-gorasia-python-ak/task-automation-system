@@ -48,7 +48,7 @@ async def create_dynamic_task(data: TaskCreate, user_id: int, db: AsyncSession):
         sched = CrontabSchedule(
             minute=str(dt.minute),
             hour=str(dt.hour),
-            day_of_month=str(dt.day), 
+            day_of_month=str(dt.day),
             month_of_year=str(dt.month),
             day_of_week=dt.strftime("%w"),
         )
@@ -57,6 +57,12 @@ async def create_dynamic_task(data: TaskCreate, user_id: int, db: AsyncSession):
         schedule_id, discriminator = sched.id, "crontabschedule"
 
     is_one_off = data.task_type == TaskType.REMINDER
+    queue_map = {
+        TaskType.REMINDER: "send_reminder",
+        TaskType.SYSTEM_CHECK: "system_check",
+        TaskType.SEND_COMIC: "send_comic",
+    }
+    target_queue = queue_map.get(data.task_type, "default")
 
     periodic_task = PeriodicTask(
         name=f"User-{user_id}-Task-{new_task.task_id}",
@@ -66,6 +72,7 @@ async def create_dynamic_task(data: TaskCreate, user_id: int, db: AsyncSession):
         args=json.dumps([user_id, new_task.task_id]),
         one_off=is_one_off,
         enabled=True,
+        queue=target_queue,
     )
     db.add(periodic_task)
 

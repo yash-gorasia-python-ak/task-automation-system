@@ -3,7 +3,7 @@ set -e
 
 echo "Running Database Migrations..."
 # Run alembic migrations
-alembic upgrade head
+uv run alembic upgrade head
 
 
 if [ -n "$1" ]; then
