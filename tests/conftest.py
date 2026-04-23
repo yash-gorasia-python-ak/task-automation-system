@@ -78,18 +78,13 @@ def override_middleware():
 
 @pytest_asyncio.fixture
 async def client(db_session):
-    """
-    FastAPI AsyncClient fixture that overrides get_db
-    to use the test database session.
-    """
-
     def _get_db_override():
         yield db_session
 
     app.dependency_overrides[get_db] = _get_db_override
 
     async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://127.0.0.1:8000"
+        transport=ASGITransport(app=app), base_url="http://0.0.0.0:8000"
     ) as ac:
         yield ac
 

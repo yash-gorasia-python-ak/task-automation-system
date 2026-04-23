@@ -45,3 +45,4 @@ async def trigger_task_now(
 ):
 
     return await TaskService(db).trigger(task_id)
+

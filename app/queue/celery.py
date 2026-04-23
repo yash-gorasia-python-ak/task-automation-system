@@ -7,7 +7,6 @@ celery_app = Celery(
     "app_worker", broker=settings.RABBITMQ_URL, backend=settings.REDIS_URL
 )
 
-
 celery_app.conf.task_queues = (
     Queue("default", Exchange("default"), routing_key="default"),
     Queue("send_reminder", Exchange("send_reminder"), routing_key="send_reminder"),
@@ -32,7 +31,8 @@ celery_app.conf.update(
     beat_dburi=f"{settings.CELERY_DB_URL}",
     beat_schema="celery_schema",
     worker_pool="prefork",
-    task_track_started=True,
+    worker_prefetch_multiplier=1,
+    task_acks_late=True,
 )
 
 celery_app.autodiscover_tasks(["app.queue.tasks"])

@@ -13,10 +13,7 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     REFRESH_TOKEN_EXPIRE_DAYS: int
-
-    SUPERUSER_NAME: str
-    SUPERUSER_PASSWORD: str
-
+    
     MAIL_USERNAME: str
     MAIL_PASSWORD: SecretStr
     MAIL_FROM: str

@@ -5,7 +5,7 @@
 | Framework | FastAPI |
 | Database | PostgreSQL |
 | Queue Broker | RabbitMQ |
-| Background Tasks | Celery |
+| Background Tasks | Celery / Celery Beat |
 | Auth | JWT (Access + Refresh Tokens) |
 | Email | aiosmtplib / fastapi-mail |
 | Runtime | Python 3.13 + uv |
