@@ -27,7 +27,7 @@ class AsyncDBTask(Task):
                 kwargs["db"] = db
                 return await self.run(*args, **kwargs)
 
-            return self.loop.run_until_complete(_run_with_session())
+        return self.loop.run_until_complete(_run_with_session())
 
 @celery_app.task(
     base=AsyncDBTask,

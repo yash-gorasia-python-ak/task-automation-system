@@ -14,11 +14,6 @@ celery_app.conf.task_queues = (
     Queue("send_comic", Exchange("send_comic"), routing_key="send_comic"),
 )
 
-celery_app.conf.task_default_queue = "default"
-celery_app.conf.task_default_exchange = "default"
-celery_app.conf.task_default_routing_key = "default"
-
-# Route tasks automatically by name
 celery_app.conf.task_routes = {
     "reminder": {"queue": "send_reminder"},
     "system_check": {"queue": "system_check"},
