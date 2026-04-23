@@ -7,16 +7,11 @@ from app.middleware.log_middleware import RequestLoggingMiddleware
 from app.api import auth
 from app.api import task
 
-from app.models.task_model import Task
-from app.models.user_model import User
-from app.models.refresh_token_model import RefreshToken
-from app.models.metadata_repository import RequestMetadata
+from app.models import *
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
     yield
     await engine.dispose()
 

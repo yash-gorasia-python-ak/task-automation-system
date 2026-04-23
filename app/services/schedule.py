@@ -48,7 +48,7 @@ async def create_dynamic_task(data: TaskCreate, user_id: int, db: AsyncSession):
         sched = CrontabSchedule(
             minute=str(dt.minute),
             hour=str(dt.hour),
-            day_of_month=str(dt.day),
+            day_of_month=str(dt.day), 
             month_of_year=str(dt.month),
             day_of_week=dt.strftime("%w"),
         )

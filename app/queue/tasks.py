@@ -27,16 +27,14 @@ class AsyncDBTask(Task):
                 kwargs["db"] = db
                 return await self.run(*args, **kwargs)
 
-        try:
             return self.loop.run_until_complete(_run_with_session())
-        except Exception as exc:
-            if isinstance(exc, self.Retry):
-                raise
-            raise self.retry(exc=exc)
-
 
 @celery_app.task(
-    base=AsyncDBTask, name="reminder", bind=True, max_retries=3, default_retry_delay=60
+    base=AsyncDBTask,
+    name="reminder",
+    bind=True,
+    max_retries=3,
+    default_retry_delay=60,
 )
 async def send_scheduled_reminder(self, user_id: int, task_id: int, db=None):
     await send_reminder(user_id, task_id, db, mail)
